@@ -6,6 +6,8 @@ import {ERC20BurnableUpgradeable} from
     "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import {ERC20PausableUpgradeable} from
     "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
+import {ERC20PermitUpgradeable} from
+    "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -16,10 +18,12 @@ contract P is
     ERC20Upgradeable,
     ERC20BurnableUpgradeable,
     ERC20PausableUpgradeable,
+    ERC20PermitUpgradeable,
     UUPSUpgradeable
 {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
@@ -34,6 +38,7 @@ contract P is
         __ERC20Pausable_init();
         __AccessControl_init();
         __UUPSUpgradeable_init();
+        __ERC20Permit_init("Plume");
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(ADMIN_ROLE, admin);
