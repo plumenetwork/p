@@ -3,7 +3,7 @@
 
 pragma solidity ^0.8.0;
 
-import { IDeploy } from './IDeploy.sol';
+import { IDeploy } from "./IDeploy.sol";
 
 /**
  * @title IDeployer Interface
@@ -11,6 +11,7 @@ import { IDeploy } from './IDeploy.sol';
  *  via a specified deployment method.
  */
 interface IDeployer is IDeploy {
+
     error DeployInitFailed();
 
     event Deployed(address indexed deployedAddress, address indexed sender, bytes32 indexed salt, bytes32 bytecodeHash);
@@ -37,7 +38,8 @@ interface IDeployer is IDeploy {
     ) external payable returns (address deployedAddress_);
 
     /**
-     * @notice Returns the address where a contract will be stored if deployed via {deploy} or {deployAndInit} by `sender`.
+     * @notice Returns the address where a contract will be stored if deployed via {deploy} or {deployAndInit} by
+     * `sender`.
      * @param bytecode The bytecode of the contract
      * @param sender The address that will deploy the contract
      * @param salt The salt that will be used to influence the contract address
@@ -48,4 +50,5 @@ interface IDeployer is IDeploy {
         address sender,
         bytes32 salt
     ) external view returns (address deployedAddress_);
+
 }

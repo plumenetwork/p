@@ -6,11 +6,16 @@ import { IDeployer } from "../src/interfaces/IDeployer.sol";
 import { PProxy } from "../src/proxy/PProxy.sol";
 import "forge-std/Script.sol";
 
+interface IUpgradeableProxy {
+
+    function upgradeToAndCall(address, bytes memory) external payable;
+
+}
+
 contract DeployScript is Script {
 
     address private constant ADMIN_ADDRESS = 0xd08b81F5e00F0e7a9506051422A055031052C7E0;
-    bytes32 private constant DEPLOY_SALT = keccak256("P");
-    address private constant DEPLOYER_ADDRESS = 0x6513Aedb4D1593BA12e50644401D976aebDc90d8;
+    address payable private constant PROXY_ADDRESS = payable(0xA3a0A690dabCDE2042b64382E3fC51fEB7B20928);
 
     function run() external {
         vm.startBroadcast(ADMIN_ADDRESS);
@@ -18,14 +23,8 @@ contract DeployScript is Script {
         P pImpl = new P();
         console.log("pImpl deployed to:", address(pImpl));
 
-        address pProxy = IDeployer(DEPLOYER_ADDRESS).deploy(
-            abi.encodePacked(
-                type(PProxy).creationCode,
-                abi.encode(pImpl, abi.encodeWithSelector(P.initialize.selector, ADMIN_ADDRESS))
-            ),
-            DEPLOY_SALT
-        );
-        console.log("pProxy deployed to:", pProxy);
+        IUpgradeableProxy(PROXY_ADDRESS).upgradeToAndCall(address(pImpl), "");
+        console.log("pProxy upgraded at:", PROXY_ADDRESS);
 
         vm.stopBroadcast();
     }
