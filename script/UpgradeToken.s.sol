@@ -14,17 +14,14 @@ interface IUpgradeableProxy {
 
 contract DeployScript is Script {
 
-    address private constant ADMIN_ADDRESS = 0xd08b81F5e00F0e7a9506051422A055031052C7E0;
-    address payable private constant PROXY_ADDRESS = payable(0xA3a0A690dabCDE2042b64382E3fC51fEB7B20928);
-
-    function run() external {
-        vm.startBroadcast(ADMIN_ADDRESS);
+    function run(address proxy) external {
+        vm.startBroadcast();
 
         P pImpl = new P();
         console.log("pImpl deployed to:", address(pImpl));
 
-        IUpgradeableProxy(PROXY_ADDRESS).upgradeToAndCall(address(pImpl), "");
-        console.log("pProxy upgraded at:", PROXY_ADDRESS);
+        IUpgradeableProxy(proxy).upgradeToAndCall(address(pImpl), "");
+        console.log("pProxy upgraded at:", proxy);
 
         vm.stopBroadcast();
     }

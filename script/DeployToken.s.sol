@@ -8,12 +8,11 @@ import "forge-std/Script.sol";
 
 contract DeployScript is Script {
 
-    address private constant ADMIN_ADDRESS = 0xd08b81F5e00F0e7a9506051422A055031052C7E0;
     bytes32 private constant DEPLOY_SALT = keccak256("P");
     address private constant DEPLOYER_ADDRESS = 0x6513Aedb4D1593BA12e50644401D976aebDc90d8;
 
-    function run() external {
-        vm.startBroadcast(ADMIN_ADDRESS);
+    function run(address admin) external {
+        vm.startBroadcast(admin);
 
         P pImpl = new P();
         console.log("pImpl deployed to:", address(pImpl));
@@ -21,7 +20,7 @@ contract DeployScript is Script {
         address pProxy = IDeployer(DEPLOYER_ADDRESS).deploy(
             abi.encodePacked(
                 type(PProxy).creationCode,
-                abi.encode(pImpl, abi.encodeWithSelector(P.initialize.selector, ADMIN_ADDRESS))
+                abi.encode(pImpl, abi.encodeWithSelector(P.initialize.selector, admin))
             ),
             DEPLOY_SALT
         );
