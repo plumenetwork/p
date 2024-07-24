@@ -12,7 +12,7 @@ contract DeployScript is Script {
     address private constant DEPLOYER_ADDRESS = 0x6513Aedb4D1593BA12e50644401D976aebDc90d8;
 
     function run(address admin) external {
-        vm.startBroadcast(admin);
+        vm.startBroadcast();
 
         P pImpl = new P();
         console.log("pImpl deployed to:", address(pImpl));
