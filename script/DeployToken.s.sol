@@ -14,6 +14,9 @@ contract DeployScript is Script {
     function run(address admin) external {
         vm.startBroadcast();
 
+        PProxy pProxyTest = new PProxy(address(1), "");
+        console.log("pProxyTest deployed to:", address(pProxyTest));
+
         P pImpl = new P();
         console.log("pImpl deployed to:", address(pImpl));
 
